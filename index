@@ -1,0 +1,1281 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Gestor de Vendas Saúde</title>
+
+<style>
+
+*{
+    box-sizing:border-box;
+    font-family:Arial,Helvetica,sans-serif;
+}
+
+body{
+    margin:0;
+    background:#f1f5f9;
+    padding:20px;
+}
+
+.container{
+    max-width:1400px;
+    margin:auto;
+}
+
+h1{
+    color:#1e40af;
+}
+
+h2{
+    color:#334155;
+}
+
+
+.dashboard{
+
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+    gap:15px;
+    margin-bottom:20px;
+
+}
+
+
+.card{
+
+    background:white;
+    padding:20px;
+    border-radius:12px;
+    box-shadow:0 3px 10px rgba(0,0,0,.1);
+
+}
+
+
+.card small{
+
+    color:#64748b;
+
+}
+
+
+.card strong{
+
+    display:block;
+    font-size:28px;
+    margin-top:10px;
+    color:#1e3a8a;
+
+}
+
+
+
+.box{
+
+    background:white;
+    padding:20px;
+    border-radius:12px;
+    margin-bottom:20px;
+    box-shadow:0 3px 10px rgba(0,0,0,.08);
+
+}
+
+
+
+.grid{
+
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+gap:10px;
+
+}
+
+
+
+input,select{
+
+width:100%;
+padding:10px;
+border:1px solid #cbd5e1;
+border-radius:6px;
+
+}
+
+
+button{
+
+padding:10px 18px;
+border:none;
+border-radius:6px;
+background:#2563eb;
+color:white;
+cursor:pointer;
+
+}
+
+
+button:hover{
+
+background:#1d4ed8;
+
+}
+
+
+
+.btn-danger{
+
+background:#dc2626;
+
+}
+
+
+.btn-whatsapp{
+
+background:#16a34a;
+
+}
+
+
+
+table{
+
+width:100%;
+border-collapse:collapse;
+background:white;
+
+}
+
+
+th{
+
+background:#1e40af;
+color:white;
+
+}
+
+
+td,th{
+
+padding:10px;
+border:1px solid #ddd;
+text-align:center;
+
+}
+
+
+
+.status-recebido{
+
+color:green;
+font-weight:bold;
+
+}
+
+
+.status-pendente{
+
+color:#d97706;
+font-weight:bold;
+
+}
+
+
+.status-atrasado{
+
+color:red;
+font-weight:bold;
+
+}
+
+
+
+.alerta{
+
+background:#fee2e2;
+color:#991b1b;
+padding:15px;
+border-radius:10px;
+margin-bottom:15px;
+
+}
+
+
+
+@media(max-width:700px){
+
+table{
+
+font-size:12px;
+
+}
+
+}
+
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<div class="container">
+
+
+<h1>📊 Gestor de Vendas Saúde</h1>
+
+
+<div id="alertas"></div>
+
+
+
+<div class="dashboard">
+
+
+<div class="card">
+
+<small>Total de vendas</small>
+
+<strong id="totalVendas">
+0
+</strong>
+
+</div>
+
+
+<div class="card">
+
+<small>Comissão prevista</small>
+
+<strong id="previsto">
+R$ 0
+</strong>
+
+</div>
+
+
+
+<div class="card">
+
+<small>Total recebido</small>
+
+<strong id="recebido">
+R$ 0
+</strong>
+
+</div>
+
+
+
+<div class="card">
+
+<small>Total pendente</small>
+
+<strong id="pendente">
+R$ 0
+</strong>
+
+</div>
+
+
+</div>
+
+
+
+
+
+<div class="box">
+
+
+<h2>Nova venda</h2>
+
+
+
+<div class="grid">
+
+
+<input id="cliente" placeholder="Nome do cliente">
+
+
+<input id="telefone" placeholder="WhatsApp (ex: 5511999999999)">
+
+
+
+<input id="dataVenda" type="date">
+
+
+
+<select id="plano">
+
+<option>Individual</option>
+
+<option>Familiar</option>
+
+<option>Empresarial</option>
+
+</select>
+
+
+
+
+<input id="valorMensalidade"
+type="number"
+placeholder="Valor mensalidade">
+
+
+
+<select id="statusVenda">
+
+<option>Em negociação</option>
+
+<option>Proposta enviada</option>
+
+<option>Comissão liberada</option>
+
+<option>Cancelado</option>
+
+</select>
+
+
+</div>
+
+
+
+
+<h3>1ª Parcela</h3>
+
+
+<div class="grid">
+
+
+<input id="valor1"
+type="number"
+placeholder="Valor da 1ª parcela">
+
+
+<input id="data1"
+type="date">
+
+
+<select id="status1">
+
+
+<option>Pendente</option>
+
+<option>Recebido</option>
+
+<option>Atrasado</option>
+
+
+</select>
+
+
+</div>
+
+
+
+
+<h3>2ª Parcela</h3>
+
+
+<div class="grid">
+
+
+<input id="valor2"
+type="number"
+placeholder="Valor da 2ª parcela">
+
+
+<input id="data2"
+type="date">
+
+
+<select id="status2">
+
+
+<option>Pendente</option>
+
+<option>Recebido</option>
+
+<option>Atrasado</option>
+
+
+</select>
+
+
+</div>
+
+
+<br>
+
+
+<button onclick="salvarVenda()">
+💾 Salvar Venda
+</button>
+
+
+</div>
+
+
+
+
+
+<div class="box">
+
+
+<h2>Controle de vendas</h2>
+
+
+<input 
+placeholder="Pesquisar cliente..."
+onkeyup="pesquisar(this.value)"
+>
+
+
+<br><br>
+
+
+<table>
+
+
+<thead>
+
+<tr>
+
+<th>Cliente</th>
+
+<th>Plano</th>
+
+<th>Mensalidade</th>
+
+<th>1ª Parcela</th>
+
+<th>2ª Parcela</th>
+
+<th>Status</th>
+
+<th>Ação</th>
+
+
+</tr>
+
+
+</thead>
+
+
+<tbody id="lista">
+
+
+</tbody>
+
+
+</table>
+
+
+</div>
+
+
+</div>
+
+
+
+<script>
+
+let vendas = JSON.parse(localStorage.getItem("vendas_saude")) || [];
+
+
+// SALVAR VENDA
+
+function salvarVenda(){
+
+    let venda = {
+
+        id: Date.now(),
+
+        cliente: document.getElementById("cliente").value,
+
+        telefone: document.getElementById("telefone").value,
+
+        dataVenda: document.getElementById("dataVenda").value,
+
+        plano: document.getElementById("plano").value,
+
+        valorMensalidade:
+        Number(document.getElementById("valorMensalidade").value || 0),
+
+
+        statusVenda:
+        document.getElementById("statusVenda").value,
+
+
+        parcela1:{
+
+            valor:
+            Number(document.getElementById("valor1").value || 0),
+
+            data:
+            document.getElementById("data1").value,
+
+            status:
+            document.getElementById("status1").value
+
+        },
+
+
+        parcela2:{
+
+            valor:
+            Number(document.getElementById("valor2").value || 0),
+
+            data:
+            document.getElementById("data2").value,
+
+            status:
+            document.getElementById("status2").value
+
+        }
+
+
+    };
+
+
+    vendas.push(venda);
+
+
+    localStorage.setItem(
+        "vendas_saude",
+        JSON.stringify(vendas)
+    );
+
+
+    limparFormulario();
+
+    carregar();
+
+}
+
+
+
+
+
+function limparFormulario(){
+
+document.querySelectorAll("input").forEach(i=>{
+
+if(i.type!="date"){
+
+i.value="";
+
+}
+
+});
+
+
+}
+
+
+
+function dinheiro(valor){
+
+return Number(valor)
+.toLocaleString(
+"pt-BR",
+{
+style:"currency",
+currency:"BRL"
+}
+);
+
+}
+
+
+
+
+
+// MOSTRAR DADOS
+
+
+function carregar(){
+
+
+let tabela=document.getElementById("lista");
+
+tabela.innerHTML="";
+
+
+let previsto=0;
+
+let recebido=0;
+
+
+
+vendas.forEach((v,index)=>{
+
+
+previsto +=
+v.parcela1.valor +
+v.parcela2.valor;
+
+
+
+if(v.parcela1.status=="Recebido"){
+
+recebido += v.parcela1.valor;
+
+}
+
+
+
+if(v.parcela2.status=="Recebido"){
+
+recebido += v.parcela2.valor;
+
+}
+
+
+
+
+tabela.innerHTML += `
+
+<tr>
+
+<td>
+${v.cliente}
+</td>
+
+
+<td>
+${v.plano}
+</td>
+
+
+<td>
+${dinheiro(v.valorMensalidade)}
+</td>
+
+
+
+<td class="status-${v.parcela1.status.toLowerCase()}">
+
+${dinheiro(v.parcela1.valor)}
+
+<br>
+
+${v.parcela1.status}
+
+</td>
+
+
+
+
+<td class="status-${v.parcela2.status.toLowerCase()}">
+
+${dinheiro(v.parcela2.valor)}
+
+<br>
+
+${v.parcela2.status}
+
+</td>
+
+
+
+
+<td>
+
+${v.statusVenda}
+
+</td>
+
+
+
+
+<td>
+
+
+<button 
+class="btn-whatsapp"
+onclick="whatsapp(${index})">
+
+WhatsApp
+
+</button>
+
+
+<br><br>
+
+
+<button 
+class="btn-danger"
+onclick="remover(${index})">
+
+Excluir
+
+</button>
+
+
+</td>
+
+
+
+</tr>
+
+`;
+
+
+
+});
+
+
+
+document.getElementById("totalVendas")
+.innerHTML=vendas.length;
+
+
+
+document.getElementById("previsto")
+.innerHTML=dinheiro(previsto);
+
+
+
+document.getElementById("recebido")
+.innerHTML=dinheiro(recebido);
+
+
+
+document.getElementById("pendente")
+.innerHTML=
+dinheiro(previsto-recebido);
+
+
+
+verificarAlertas();
+
+
+
+}
+
+
+
+
+
+// EXCLUIR
+
+
+function remover(index){
+
+if(confirm("Excluir esta venda?")){
+
+vendas.splice(index,1);
+
+
+localStorage.setItem(
+"vendas_saude",
+JSON.stringify(vendas)
+);
+
+
+carregar();
+
+
+}
+
+
+}
+
+
+
+
+
+// PESQUISA
+
+
+function pesquisar(valor){
+
+
+let linhas =
+document.querySelectorAll("#lista tr");
+
+
+
+linhas.forEach(linha=>{
+
+
+if(
+linha.innerText
+.toLowerCase()
+.includes(
+valor.toLowerCase()
+)
+){
+
+linha.style.display="";
+
+
+}else{
+
+
+linha.style.display="none";
+
+
+}
+
+
+});
+
+
+}
+
+
+
+
+
+// ALERTAS DE PAGAMENTO
+
+
+function verificarAlertas(){
+
+
+let hoje =
+new Date()
+.toISOString()
+.split("T")[0];
+
+
+let mensagens=[];
+
+
+
+vendas.forEach(v=>{
+
+
+if(
+v.parcela1.data==hoje &&
+v.parcela1.status!="Recebido"
+){
+
+mensagens.push(
+`1ª parcela de ${v.cliente} vence hoje`
+);
+
+}
+
+
+
+if(
+v.parcela2.data==hoje &&
+v.parcela2.status!="Recebido"
+){
+
+mensagens.push(
+`2ª parcela de ${v.cliente} vence hoje`
+);
+
+}
+
+
+
+});
+
+
+
+
+let area =
+document.getElementById("alertas");
+
+
+
+if(mensagens.length){
+
+
+area.innerHTML=
+
+`
+<div class="alerta">
+
+<b>🔔 Pagamentos de hoje:</b>
+
+<br><br>
+
+${mensagens.join("<br>")}
+
+</div>
+
+`;
+
+
+
+}else{
+
+
+area.innerHTML="";
+
+
+}
+
+
+}
+
+
+
+
+
+// WHATSAPP
+
+
+function whatsapp(index){
+
+
+let v=vendas[index];
+
+
+let mensagem =
+
+`🔔 Lembrete financeiro
+
+Cliente: ${v.cliente}
+
+Plano: ${v.plano}
+
+1ª Parcela:
+${dinheiro(v.parcela1.valor)}
+Status: ${v.parcela1.status}
+
+2ª Parcela:
+${dinheiro(v.parcela2.valor)}
+Status: ${v.parcela2.status}
+`;
+
+
+
+let url =
+
+"https://wa.me/?text="
+
++
+
+encodeURIComponent(mensagem);
+
+
+
+window.open(url,"_blank");
+
+
+}
+
+
+
+
+
+carregar();
+
+// ===============================
+// RELATÓRIO FINANCEIRO
+// ===============================
+
+
+function relatorio(){
+
+let total=0;
+let recebido=0;
+let pendente=0;
+let atrasado=0;
+
+
+vendas.forEach(v=>{
+
+
+let parcelas=[v.parcela1,v.parcela2];
+
+
+parcelas.forEach(p=>{
+
+
+total += p.valor;
+
+
+if(p.status=="Recebido"){
+
+recebido += p.valor;
+
+}
+
+
+if(p.status=="Pendente"){
+
+pendente += p.valor;
+
+}
+
+
+if(p.status=="Atrasado"){
+
+atrasado += p.valor;
+
+}
+
+
+});
+
+
+});
+
+
+
+alert(
+
+"RELATÓRIO FINANCEIRO\n\n"+
+
+"Comissão prevista: "+
+dinheiro(total)+"\n\n"+
+
+"Recebido: "+
+dinheiro(recebido)+"\n\n"+
+
+"Pendente: "+
+dinheiro(pendente)+"\n\n"+
+
+"Atrasado: "+
+dinheiro(atrasado)
+
+);
+
+
+}
+
+
+
+// ===============================
+// EXPORTAR BACKUP
+// ===============================
+
+
+function exportarBackup(){
+
+
+let dados =
+JSON.stringify(
+vendas,
+null,
+2
+);
+
+
+let arquivo =
+new Blob(
+[dados],
+{
+type:"application/json"
+}
+);
+
+
+
+let link =
+document.createElement("a");
+
+
+link.href =
+URL.createObjectURL(arquivo);
+
+
+link.download =
+"backup-vendas-saude.json";
+
+
+link.click();
+
+
+}
+
+
+
+// ===============================
+// IMPORTAR BACKUP
+// ===============================
+
+
+function importarBackup(event){
+
+
+let arquivo =
+event.target.files[0];
+
+
+let leitor =
+new FileReader();
+
+
+
+leitor.onload=function(){
+
+
+vendas =
+JSON.parse(
+leitor.result
+);
+
+
+
+localStorage.setItem(
+"vendas_saude",
+JSON.stringify(vendas)
+);
+
+
+
+carregar();
+
+
+}
+
+
+
+leitor.readAsText(arquivo);
+
+
+
+}
+
+
+
+// ===============================
+// VERIFICAR ATRASOS AUTOMÁTICOS
+// ===============================
+
+
+function atualizarAtrasados(){
+
+
+let hoje =
+new Date();
+
+
+
+vendas.forEach(v=>{
+
+
+let parcelas=[
+v.parcela1,
+v.parcela2
+];
+
+
+
+parcelas.forEach(p=>{
+
+
+if(
+p.status=="Pendente" &&
+p.data
+){
+
+
+let data =
+new Date(p.data);
+
+
+
+if(data < hoje){
+
+
+p.status="Atrasado";
+
+
+}
+
+
+}
+
+
+});
+
+
+});
+
+
+
+localStorage.setItem(
+"vendas_saude",
+JSON.stringify(vendas)
+);
+
+
+
+}
+
+
+
+atualizarAtrasados();
+
+
+
+
+
+// ===============================
+// MENU DE RELATÓRIOS
+// ===============================
+
+
+let botoes = `
+
+
+<div class="box">
+
+
+<h2>Ferramentas</h2>
+
+
+<button onclick="relatorio()">
+
+📊 Relatório Financeiro
+
+</button>
+
+
+<button onclick="exportarBackup()">
+
+💾 Fazer Backup
+
+</button>
+
+
+
+<label>
+
+<input 
+type="file"
+accept=".json"
+onchange="importarBackup(event)"
+>
+
+
+Restaurar Backup
+
+</label>
+
+
+</div>
+
+
+`;
+
+
+
+document
+.querySelector(".container")
+.insertAdjacentHTML(
+"beforeend",
+botoes
+);
+
+</script>
+
+
+</body>
+
+</html>
